@@ -124,6 +124,14 @@ TourSchema.pre('save',function(next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 })
+
+TourSchema.pre(/^find/,function(next) {
+    this.populate({
+        path: 'guides',
+        select : "-__v -passwordChangedAt"
+    });
+    next();
+});
 //This one is for Embedding User into Tour
 // tourSchema.pre('save', async function(next) {
 //   const guidesPromises = this.guides.map(async id => await User.findById(id));
