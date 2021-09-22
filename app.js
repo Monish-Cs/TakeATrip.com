@@ -2,6 +2,7 @@ const express = require('express');
 const morgan=require('morgan');
 const tourrouter=require('./routers/tourRouter');
 const userrouter=require('./routers/userRouter');
+const reviewRouter = require('./routers/reviewRouter');
 const AppError = require('./utils/AppError');
 const ErrorController = require('./controllers/ErrorController');
 const rateLimit = require('express-rate-limit');
@@ -67,6 +68,7 @@ app.use((req,res,next)=>{
 });
 app.use("/api/v1/tours",tourrouter);
 app.use("/api/v1/users",userrouter);
+app.use("/api/v1/reviews",reviewRouter);
 
 app.all('*',(req,res,next)=>{
     /* res.status(404).json({
