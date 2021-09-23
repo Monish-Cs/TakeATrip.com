@@ -1,8 +1,7 @@
 const AppError = require('../utils/AppError');
 const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
-
-
+const Factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
@@ -79,9 +78,11 @@ exports.updateuser=(req,res)=>{
         message: "Server not yet defined"
     });
 }
-exports.deleteuser=(req,res)=>{
+
+exports.deleteuser = Factory.deleteOne(User);
+/* exports.deleteuser=(req,res)=>{
     res.status(500).send({
         status: "error",
         message: "Server not yet defined"
     });
-}
+} */
