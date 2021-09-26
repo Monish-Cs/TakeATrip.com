@@ -72,12 +72,16 @@ exports.createuser=(req,res)=>{
         message: "Server not yet defined"
     });
 }
-exports.updateuser=(req,res)=>{
+
+exports.updateuser = Factory.updateOne(User)
+//Do not update password here.
+
+/* exports.updateuser=(req,res)=>{
     res.status(500).send({
         status: "error",
         message: "Server not yet defined"
     });
-}
+} */
 
 exports.deleteuser = Factory.deleteOne(User);
 /* exports.deleteuser=(req,res)=>{
