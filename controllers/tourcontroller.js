@@ -41,7 +41,9 @@ exports.gettour=catchAsync(async (req, res,next) => {
         });
         
 });
-exports.createTour=catchAsync(async (req, res,next) => {
+
+exports.createTour = Factory.createOne(Tour);
+/* exports.createTour=catchAsync(async (req, res,next) => {
   const newTour = await Tour.create(req.body);
       res.status(201).json({
         status: 'success',
@@ -50,7 +52,7 @@ exports.createTour=catchAsync(async (req, res,next) => {
         }
       });
       
-});
+}); */
 
 
 exports.updateTour=Factory.updateOne(Tour)
