@@ -1,6 +1,5 @@
 //const fs=require('fs');
 const Tour=require('./../models/tourModel');
-const APIFeatures=require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/AppError');
 const Factory = require('./handlerFactory')
@@ -11,8 +10,8 @@ exports.aliasTopTours = (req, res, next) => {
   req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
   next();
 };
-
-exports.getalltours=catchAsync(async (req, res,next) => {
+exports.getalltours=Factory.getAll(Tour);
+/* exports.getalltours=catchAsync(async (req, res,next) => {
   console.log(req.query);
       const features = new APIFeatures(Tour.find(), req.query)
       .filter()
@@ -25,9 +24,9 @@ exports.getalltours=catchAsync(async (req, res,next) => {
             result: tours.length,
             tours
         });
-});
-
-exports.gettour=catchAsync(async (req, res,next) => {
+}); */
+exports.gettour= Factory.getOne(Tour, { path: 'reviews' });
+/* exports.gettour=catchAsync(async (req, res,next) => {
   console.log(req.param.id)
         const tour = await Tour.findById(req.params.id).populate('reviews');
         if(!tour){
@@ -41,7 +40,7 @@ exports.gettour=catchAsync(async (req, res,next) => {
         });
         
 });
-
+ */
 exports.createTour = Factory.createOne(Tour);
 /* exports.createTour=catchAsync(async (req, res,next) => {
   const newTour = await Tour.create(req.body);

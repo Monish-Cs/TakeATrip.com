@@ -48,26 +48,17 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
       data: null
     });
 });
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const users = await User.find();
-  
-    // SEND RESPONSE
-    res.status(200).json({
-      status: 'success',
-      results: users.length,
-      data: {
-        users
-      }
-    });
-});
-exports.getuser=(req,res)=>{
+exports.getAllUsers = Factory.getAll(User);
+exports.getuser = Factory.getOne(User);
+
+exports.createuser=(req,res)=>{
     res.status(500).send({
         status: "error",
-        message: "Server not yet defined"
+        message: "Server not yet defined, Please Signup to create"
     });
 }
-exports.createuser = Factory.createOne(User);
 
 exports.updateuser = Factory.updateOne(User)
-//Do not update password here.
+//Do not update password
+
 exports.deleteuser = Factory.deleteOne(User);
