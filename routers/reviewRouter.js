@@ -20,8 +20,8 @@ router
 
 router
   .route('/:id')
-  .delete(reviewController.deleteReview)
-  .patch(reviewController.updateReview)
+  .delete(authController.requireTo('admin','user'),reviewController.deleteReview)
+  .patch(authController.requireTo('admin','user'),reviewController.updateReview)
   .get(reviewController.getReview);
 
 
