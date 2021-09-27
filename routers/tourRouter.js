@@ -13,14 +13,14 @@ router
     .route("/top-5-cheap")
     .get(tourcontroller.aliasTopTours,tourcontroller.getalltours);
 router.route("/tour-stats").get(tourcontroller.gettourstats);
-router.route("/tour-months/:year").get(tourcontroller.getmonth);
+router.route("/tour-months/:year").get(authController.protect,authController.requireTo('admin','lead-guide','guide'),tourcontroller.getmonth);
 
 router.route("/")
-    .get(authController.protect,tourcontroller.getalltours)
-    .post(tourcontroller.createTour);
+    .get(tourcontroller.getalltours)
+    .post(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.createTour);
 router.route("/:id")
     .get(tourcontroller.gettour)
-    .patch(tourcontroller.updateTour)
+    .patch(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.updateTour)
     .delete(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.deleteTour);
 
 /* router
