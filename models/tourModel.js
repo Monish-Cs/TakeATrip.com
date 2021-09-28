@@ -176,10 +176,10 @@ TourSchema.post(/^find/,function(docs,next) {
 });
 
 //Aggregate Middleware
-TourSchema.pre('aggregate',function(next) {
+/* TourSchema.pre('aggregate',function(next) {
     this.pipeline().unshift( {$match: { secretTour : {$ne : true}}})
     next();
-})
+}) */
 const Tour=mongoose.model('Tour',TourSchema);
 
 module.exports=Tour;
