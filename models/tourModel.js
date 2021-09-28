@@ -115,6 +115,13 @@ const TourSchema=new mongoose.Schema({
     toJSON: { virtuals: true},
     toObject: { virtuals: true}
 });
+
+// tourSchema.index({ price: 1 });
+TourSchema.index({ price: 1, ratingsAverage: -1 });
+TourSchema.index({ slug: 1 });
+TourSchema.index({ startLocation: '2dsphere' });
+
+
 TourSchema.virtual('durationWeeks').get(function() {
     return this.duration/7;
 });
