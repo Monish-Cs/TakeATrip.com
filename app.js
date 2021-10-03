@@ -1,19 +1,29 @@
+const path = require('path');
 const express = require('express');
 const morgan=require('morgan');
-const tourrouter=require('./routers/tourRouter');
-const userrouter=require('./routers/userRouter');
-const reviewRouter = require('./routers/reviewRouter');
-const AppError = require('./utils/AppError');
-const ErrorController = require('./controllers/ErrorController');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 
+const tourrouter=require('./routers/tourRouter');
+const userrouter=require('./routers/userRouter');
+const reviewRouter = require('./routers/reviewRouter');
+const AppError = require('./utils/AppError');
+const ErrorController = require('./controllers/ErrorController');
+
 
 const app = express();
+
+app.set('view engine','pug');
+app.set('views',path.join(__dirname,'views'))
+
+
 // 1) GLOBAL MIDDLEWARES
+// Serving static files
+//app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname,'public')));
 // Set security HTTP headers
 app.use(helmet());
 
@@ -59,12 +69,13 @@ app.use((req,res,next)=>{
 });
 
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 app.use((req,res,next)=>{
     console.log(req.requestTime=new Date().toISOString());
     next();
+});
+
+app.get('/',(req,res)=>{
+    res.status(200).render('base');
 });
 app.use("/api/v1/tours",tourrouter);
 app.use("/api/v1/users",userrouter);
