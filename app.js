@@ -80,6 +80,18 @@ app.get('/',(req,res)=>{
         user: 'Monish'
     });
 });
+
+app.get("/overview", (req,res)=>{
+    res.status(200).render('overview',{
+        title: 'All tours'
+    });
+});
+
+app.get("/tour", (req,res)=>{
+    res.status(200).render('tour',{
+        title: 'The Fores Hiker Tour'
+    });
+});
 app.use("/api/v1/tours",tourrouter);
 app.use("/api/v1/users",userrouter);
 app.use("/api/v1/reviews",reviewRouter);
