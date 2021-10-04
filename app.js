@@ -12,6 +12,7 @@ const userrouter=require('./routers/userRouter');
 const reviewRouter = require('./routers/reviewRouter');
 const AppError = require('./utils/AppError');
 const ErrorController = require('./controllers/ErrorController');
+const viewsRoutes = require('./routers/viewsRoutes');
 
 
 const app = express();
@@ -74,27 +75,11 @@ app.use((req,res,next)=>{
     next();
 });
 
-app.get('/',(req,res)=>{
-    res.status(200).render('base',{
-        tour: 'The Forest Hiker',
-        user: 'Monish'
-    });
-});
-
-app.get("/overview", (req,res)=>{
-    res.status(200).render('overview',{
-        title: 'All tours'
-    });
-});
-
-app.get("/tour", (req,res)=>{
-    res.status(200).render('tour',{
-        title: 'The Fores Hiker Tour'
-    });
-});
+app.use("/",viewsRoutes);
 app.use("/api/v1/tours",tourrouter);
 app.use("/api/v1/users",userrouter);
 app.use("/api/v1/reviews",reviewRouter);
+
 
 app.all('*',(req,res,next)=>{
     /* res.status(404).json({
