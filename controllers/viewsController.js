@@ -13,7 +13,6 @@ exports.getOverview = catchAsync(async (req,res,next)=>{
 });
 exports.getTour =  catchAsync(async (req,res,next)=>{
     // 1) get the data for the requested tour(including reviews and data)
-    console.log(req.params.slug);
     const tour=await Tour.findOne({slug: req.params.slug}).populate({
         path: 'reviews',
         fields: 'review rating user'
@@ -22,7 +21,10 @@ exports.getTour =  catchAsync(async (req,res,next)=>{
 
     // 3) Render template using data from 1)
 
-    res.status(200).render('tour',{
+    res.status(200).set(
+        'Content-Security-Policy',
+        'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com'
+      ).render('tour',{
         title: `${tour.name} Tour`,
         tour
     });
