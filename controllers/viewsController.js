@@ -1,12 +1,19 @@
 const Tour = require('./../models/tourModel');
-const catchAsync = require('./../utils/catchAsync')
+const catchAsync = require('./../utils/catchAsync');
+const Booking = require('../models/bookingModel');
+const AppError = require('./../utils/AppError');
+const User = require('./../models/userModel');
+
 exports.getOverview = catchAsync(async (req,res,next)=>{
     //1) Get Tour data from collection
     const tours =await Tour.find();
     //2) Build Template
 
     //3) Render that template using tour data from 1)
-    res.status(200).render('overview',{
+    res.status(200).set(
+      'Content-Security-Policy',
+      `connect-src http://127.0.0.1:8000/api/v1/users/logout`,
+    ).render('overview',{
         title: 'All tours',
         tours
     });
@@ -17,21 +24,83 @@ exports.getTour =  catchAsync(async (req,res,next)=>{
         path: 'reviews',
         fields: 'review rating user'
     });
+
+    if(!tour) {
+        return next(new AppError('There is no tour with that name',404));
+    }
+
     // 2) Build Template
 
     // 3) Render template using data from 1)
-
+    /* .set(
+        'Content-Security-Policy',
+        'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com',
+      )  http://127.0.0.1:8000/api/v1/users/logout https://js.stripe.com/v3/ http://127.0.0.1:8000/api/v1/bookings/checkOut-Session/${tour.id}*/
     res.status(200).set(
         'Content-Security-Policy',
-        'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com'
+        `connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com http://127.0.0.1:8000/api/v1/users/logout http://127.0.0.1:8000/api/v1/bookings/checkOut-Session/${tour.id}`,
       ).render('tour',{
         title: `${tour.name} Tour`,
         tour
     });
 });
-
+/* .set(
+    'Content-Security-Policy',
+    'connect=src https://cdnjs.cloudflare.com'
+) */
 exports.getLoginForm = (req,res)=>{
-    res.status(200).render('login',{
+    res.status(200).set(
+        'Content-Security-Policy',
+        'connect=src https://cdnjs.cloudflare.com'
+    ).render('login',{
         title: 'Log into your account'
     })
 }
+
+exports.getAccount = (req,res)=>{
+    res.status(200).set(
+      'Content-Security-Policy',
+      `connect-src http://127.0.0.1:8000/api/v1/users/logout http://127.0.0.1:8000/api/v1/users/updateMyPassword http://127.0.0.1:8000/api/v1/users/updateMe`,
+    ).render('account',{
+        title: 'Your Account'
+    });
+}
+
+exports.updateUserData = catchAsync(async (req, res, next) => {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        name: req.body.name,
+        email: req.body.email
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+  
+    res.status(200).set(
+      'Content-Security-Policy',
+      `connect-src http://127.0.0.1:8000/api/v1/users/logout http://127.0.0.1:8000/api/v1/users/updateMyPassword http://127.0.0.1:8000/api/v1/users/updateMe`,
+    ).render('account', {
+      title: 'Your account',
+      user: updatedUser
+    });
+  });
+  
+exports.getMyTours = catchAsync(async (req, res, next) => {
+    // 1) Find all bookings
+    const bookings = await Booking.find({ user: req.user.id });
+  
+    // 2) Find tours with the returned IDs
+    const tourIDs = bookings.map(el => el.tour);
+    const tours = await Tour.find({ _id: { $in: tourIDs } });
+  
+    res.status(200).set(
+      'Content-Security-Policy',
+      `connect-src http://127.0.0.1:8000/api/v1/users/logout`,
+    ).render('overview', {
+      title: 'My Tours',
+      tours
+    });
+});
