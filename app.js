@@ -6,10 +6,12 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const tourrouter=require('./routers/tourRouter');
 const userrouter=require('./routers/userRouter');
 const reviewRouter = require('./routers/reviewRouter');
+const bookingRouter = require('./routers/bookingroutes');
 const AppError = require('./utils/AppError');
 const ErrorController = require('./controllers/ErrorController');
 const viewsRoutes = require('./routers/viewsRoutes');
@@ -42,6 +44,8 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -72,6 +76,7 @@ app.use((req,res,next)=>{
 
 app.use((req,res,next)=>{
     console.log(req.requestTime=new Date().toISOString());
+    //console.log(req.cookies)
     next();
 });
 
@@ -79,7 +84,7 @@ app.use("/",viewsRoutes);
 app.use("/api/v1/tours",tourrouter);
 app.use("/api/v1/users",userrouter);
 app.use("/api/v1/reviews",reviewRouter);
-
+app.use("/api/v1/bookings",bookingRouter);
 
 app.all('*',(req,res,next)=>{
     /* res.status(404).json({
@@ -90,6 +95,7 @@ app.all('*',(req,res,next)=>{
 /*     const err = new Error(` Cannot Find ${req.originalUrl} .... Try proper url`);
     err.statusCode = 202;
     err.status = 'Fail'; */
+    console.log(req.originalUrl);
     next(new AppError(` Cannot Find ${req.originalUrl} .... Try proper url`,404));
 });
 
