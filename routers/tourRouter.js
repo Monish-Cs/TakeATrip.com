@@ -15,12 +15,20 @@ router
 router.route("/tour-stats").get(tourcontroller.gettourstats);
 router.route("/tour-months/:year").get(authController.protect,authController.requireTo('admin','lead-guide','guide'),tourcontroller.getmonth);
 
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourcontroller.getToursWithin);
+// /tours-within?distance=233&center=-40,45&unit=mi
+// /tours-within/233/center/-40,45/unit/mi
+
+router.route('/distances/:latlng/unit/:unit').get(tourcontroller.getDistances);
+
 router.route("/")
     .get(tourcontroller.getalltours)
     .post(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.createTour);
 router.route("/:id")
     .get(tourcontroller.gettour)
-    .patch(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.updateTour)
+    .patch(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.uploadTourImages,tourcontroller.resizeTourImages,tourcontroller.updateTour)
     .delete(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.deleteTour);
 
 /* router
