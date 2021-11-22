@@ -28,7 +28,7 @@ router.route("/")
     .post(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.createTour);
 router.route("/:id")
     .get(tourcontroller.gettour)
-    .patch(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.updateTour)
+    .patch(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.uploadTourImages,tourcontroller.resizeTourImages,tourcontroller.updateTour)
     .delete(authController.protect,authController.requireTo('admin','lead-guide'),tourcontroller.deleteTour);
 
 /* router
