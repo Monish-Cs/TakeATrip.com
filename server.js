@@ -24,9 +24,9 @@ mongoose.connect(db, {
   console.log("DB Connections Successfull");
 })
 
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  console.log("Listening........");
+
+const server = app.listen(8000, () => {
+  //console.log("Listening........");
 });
 
 process.on('unhandledRejection', err => {
@@ -37,3 +37,10 @@ process.on('unhandledRejection', err => {
   });
 });
 
+//heroku specific
+/* process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+}); */
