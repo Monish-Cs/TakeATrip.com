@@ -53,3 +53,8 @@ Project 	Home Page
      "stripe-client": "^1.1.5",
      "validator": "^13.6.0",
      "xss-clean": "^0.1.1"
+     
+Deployed in heroku: https://takeatrip-app.herokuapp.com/
+     
+     
+  
