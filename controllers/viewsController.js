@@ -12,7 +12,7 @@ exports.getOverview = catchAsync(async (req,res,next)=>{
     //3) Render that template using tour data from 1)
     res.status(200).set(
       'Content-Security-Policy',
-      `connect-src /api/v1/users/logout`,
+      `connect-src https://shrouded-plateau-58895.herokuapp.com/api/v1/users/logout`,
     ).render('overview',{
         title: 'All tours',
         tours
@@ -38,7 +38,7 @@ exports.getTour =  catchAsync(async (req,res,next)=>{
       )  http://127.0.0.1:8000/api/v1/users/logout https://js.stripe.com/v3/ http://127.0.0.1:8000/api/v1/bookings/checkOut-Session/${tour.id}*/
     res.status(200).set(
         'Content-Security-Policy',
-        `connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com /api/v1/users/logout /api/v1/bookings/checkOut-Session/${tour.id}`,
+        `connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com https://shrouded-plateau-58895.herokuapp.com/api/v1/users/logout https://shrouded-plateau-58895.herokuapp.com/api/v1/bookings/checkOut-Session/${tour.id}`,
       ).render('tour',{
         title: `${tour.name} Tour`,
         tour
@@ -60,7 +60,7 @@ exports.getLoginForm = (req,res)=>{
 exports.getAccount = (req,res)=>{
     res.status(200).set(
       'Content-Security-Policy',
-      `connect-src /api/v1/users/logout /api/v1/users/updateMyPassword /api/v1/users/updateMe`,
+      `connect-src https://shrouded-plateau-58895.herokuapp.com/api/v1/users/logout https://shrouded-plateau-58895.herokuapp.com/api/v1/users/updateMyPassword https://shrouded-plateau-58895.herokuapp.com/api/v1/users/updateMe`,
     ).render('account',{
         title: 'Your Account'
     });
@@ -81,7 +81,7 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
   
     res.status(200).set(
       'Content-Security-Policy',
-      `connect-src /api/v1/users/logout /api/v1/users/updateMyPassword /api/v1/users/updateMe`,
+      `connect-src https://shrouded-plateau-58895.herokuapp.com/api/v1/users/logout https://shrouded-plateau-58895.herokuapp.com/api/v1/users/updateMyPassword https://shrouded-plateau-58895.herokuapp.com/api/v1/users/updateMe`,
     ).render('account', {
       title: 'Your account',
       user: updatedUser
@@ -98,7 +98,7 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   
     res.status(200).set(
       'Content-Security-Policy',
-      `connect-src /api/v1/users/logout`,
+      `connect-src https://shrouded-plateau-58895.herokuapp.com/api/v1/users/logout`,
     ).render('overview', {
       title: 'My Tours',
       tours
