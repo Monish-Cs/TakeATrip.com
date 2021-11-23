@@ -7,6 +7,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
+const cors = require('cors');
 
 const tourrouter=require('./routers/tourRouter');
 const userrouter=require('./routers/userRouter');
@@ -19,11 +21,17 @@ const viewsRoutes = require('./routers/viewsRoutes');
 
 const app = express();
 
+//heroku specific
+//app.enable('trust proxy');
+
 app.set('view engine','pug');
 app.set('views',path.join(__dirname,'views'))
 
 
 // 1) GLOBAL MIDDLEWARES
+//Implement cors
+app.use(cors());
+
 // Serving static files
 //app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname,'public')));
@@ -67,15 +75,17 @@ app.use(
     })
 );
 
+app.use(compression());
+
 //my own middleware
 app.use((req,res,next)=>{
-    console.log("Hello from the middleware");
+    //console.log("Hello from the middleware");
     next();
 });
 
 
 app.use((req,res,next)=>{
-    console.log(req.requestTime=new Date().toISOString());
+    //console.log(req.requestTime=new Date().toISOString());
     //console.log(req.cookies)
     next();
 });
@@ -95,7 +105,7 @@ app.all('*',(req,res,next)=>{
 /*     const err = new Error(` Cannot Find ${req.originalUrl} .... Try proper url`);
     err.statusCode = 202;
     err.status = 'Fail'; */
-    console.log(req.originalUrl);
+    //console.log(req.originalUrl);
     next(new AppError(` Cannot Find ${req.originalUrl} .... Try proper url`,404));
 });
 
